@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:wotastagram/UI.dart';
 import 'main.dart';
 import 'timeline_page.dart';
 
@@ -181,7 +182,7 @@ class RegisterPage extends StatelessWidget {
                       // チャット画面に遷移＋ログイン画面を破棄
                       await Navigator.of(context).pushReplacement(
                         MaterialPageRoute(builder: (context) {
-                          return TimelinePage();
+                          return UI();
                         }),
                       );
                     } catch (e) {
@@ -271,7 +272,7 @@ class LoginPage extends StatelessWidget {
                       // チャット画面に遷移＋ログイン画面を破棄
                       await Navigator.of(context).pushReplacement(
                         MaterialPageRoute(builder: (context) {
-                          return TimelinePage();
+                          return UI();
                         }),
                       );
                     } catch (e) {

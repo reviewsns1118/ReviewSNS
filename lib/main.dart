@@ -2,7 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'timeline_page.dart';
+import 'UI.dart';
 import 'login.dart';
 import 'firebase_options.dart';
 
@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
             }
             if (snapshot.hasData) {
               // User が null でなない、つまりサインイン済みのホーム画面へ
-              return TimelinePage();
+              return UI();
             }
             // User が null である、つまり未サインインのサインイン画面へ
             return StartPage();
