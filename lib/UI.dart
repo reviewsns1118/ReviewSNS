@@ -1,10 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:wotastagram/login.dart';
+import 'login.dart';
 import 'timeline_page.dart';
 import 'search_page.dart';
 import 'post_page.dart';
 import 'Account_page.dart';
+
 
 class UI extends StatefulWidget {
   UI(this.page);
@@ -44,11 +45,14 @@ void initState() {
             foregroundColor: Colors.white,
             backgroundColor: _color
           ),
-          onPressed: () {
-            if(page==AccountPage()){
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => StartPage()),
+          onPressed: () async {
+            if(_currentIndex==3){
+              await FirebaseAuth.instance.signOut();
+              // ログイン画面に遷移＋チャット画面を破棄
+              await Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) {
+                  return StartPage();
+                }),
               );
             }
             else {
@@ -56,6 +60,7 @@ void initState() {
               page=AccountPage();
               _color=Colors.red;
               _icon=Icons.logout;
+              _currentIndex=3;
             });
             }
           },
@@ -87,6 +92,7 @@ void initState() {
         currentIndex: _currentIndex,
         onTap: (index) {
           setState(() {
+            _currentIndex=index;
             page = pages[index];
             if(index==3){
               _color=Colors.red;
