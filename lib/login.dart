@@ -182,7 +182,7 @@ class RegisterPage extends StatelessWidget {
                       // チャット画面に遷移＋ログイン画面を破棄
                       await Navigator.of(context).pushReplacement(
                         MaterialPageRoute(builder: (context) {
-                          return UI();
+                          return UI(TimelinePage());
                         }),
                       );
                     } catch (e) {
@@ -272,7 +272,7 @@ class LoginPage extends StatelessWidget {
                       // チャット画面に遷移＋ログイン画面を破棄
                       await Navigator.of(context).pushReplacement(
                         MaterialPageRoute(builder: (context) {
-                          return UI();
+                          return UI(TimelinePage());
                         }),
                       );
                     } catch (e) {

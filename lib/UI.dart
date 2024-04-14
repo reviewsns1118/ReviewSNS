@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'main.dart';
+import 'package:flutter/widgets.dart';
+import 'package:wotastagram/login.dart';
 import 'timeline_page.dart';
 import 'search_page.dart';
 import 'post_page.dart';
 import 'Account_page.dart';
-import 'login.dart';
-import 'infoupdate.dart';
-import 'firebase_options.dart';
 
 class UI extends StatefulWidget {
+  UI(this.page);
+  Widget page;
   @override
-  _UIState createState() => _UIState();
+  _UIState createState() => _UIState(page);
 }
 
 class _UIState extends State<UI> {
- late List<Widget> pages;
- int _currentIndex = 0;
+  _UIState(this.page);
+  Widget page;
+  late List<Widget> pages;
+  int _currentIndex = 0;
+  IconData _icon=Icons.account_circle;
+  Color _color=Colors.black;
 
 @override
 void initState() {
@@ -40,11 +40,26 @@ void initState() {
         foregroundColor: Colors.white,
         // 左側のアイコン
         leading: IconButton(
+          style: IconButton.styleFrom(
+            foregroundColor: Colors.white,
+            backgroundColor: _color
+          ),
           onPressed: () {
-            setState(() {
-              _currentIndex = 3;
-            });        },
-          icon: Icon(Icons.account_circle),
+            if(page==AccountPage()){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => StartPage()),
+              );
+            }
+            else {
+              setState(() {
+              page=AccountPage();
+              _color=Colors.red;
+              _icon=Icons.logout;
+            });
+            }
+          },
+          icon: Icon(_icon),
         ),
         // タイトルテキスト
         title: Text(
@@ -63,7 +78,7 @@ void initState() {
           ),
         ],
       ),
-      body: pages[_currentIndex],
+      body: page,
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.black, 
@@ -72,7 +87,15 @@ void initState() {
         currentIndex: _currentIndex,
         onTap: (index) {
           setState(() {
-            _currentIndex = index;
+            page = pages[index];
+            if(index==3){
+              _color=Colors.red;
+              _icon=Icons.logout;
+            }
+            else {
+              _color=Colors.black;
+              _icon=Icons.account_circle;
+            }
           });
         },
         items: [

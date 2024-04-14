@@ -1,14 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'main.dart';
-import 'timeline_page.dart';
-import 'search_page.dart';
-import 'post_page.dart';
-import 'login.dart';
 import 'infoupdate.dart';
-import 'firebase_options.dart';
 
 
 class AccountPage extends StatelessWidget {
