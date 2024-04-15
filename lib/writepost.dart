@@ -25,7 +25,8 @@ class _WritePostState extends State<WritePost> {
     'アニメ': Icons.rocket_launch,
     'ゲーム': Icons.videogame_asset,
   };
-
+  bool netabare=false;
+  bool ending=false;
   CollectionReference works = FirebaseFirestore.instance.collection('works');
   @override
   Widget build(BuildContext context) {
@@ -129,6 +130,37 @@ class _WritePostState extends State<WritePost> {
                 });
               },
             ),
+            Row(
+              children: [
+                Checkbox(
+                  value: netabare, 
+                  onChanged: (value){
+                    netabare=value!;
+                  },
+                  checkColor: Colors.blue,
+                ),
+                Text(
+                  "ネタバレ注意",
+                  style: TextStyle(color: Colors.white),
+                ),
+                Checkbox(
+                  value: ending, 
+                  onChanged: (value){
+                    ending=value!;
+                  },
+                  checkColor: Colors.blue,
+                ),
+                Text(
+                  "最後まで見た",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ],
+            ),
+            Text(
+              "上位のタグ",
+              style: TextStyle(color: Colors.white),
+            ),
+            
           ],
         ),
       ),
