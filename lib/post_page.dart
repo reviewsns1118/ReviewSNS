@@ -33,8 +33,8 @@ class PostPage extends ConsumerWidget {
                 fillColor: Colors.white,
                 hintText: '作品を検索'
                ),
-               onChanged: (query) {
-                searchState.searchWhere(query);
+               onSubmitted: (query) {
+                searchState.searchWhere(query,"works","titleOption");
               },
             ),
           ),

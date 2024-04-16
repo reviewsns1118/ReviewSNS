@@ -209,6 +209,7 @@ class AddWork extends State<Add> {
                     'author': author,
                     'imageURL': imageURL,
                     'imageref': imageref,
+                    'docid' : works.id,
                   });
                   
                   Map<String, dynamic>? d = await getDoc();

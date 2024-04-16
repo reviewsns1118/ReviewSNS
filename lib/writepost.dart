@@ -27,7 +27,7 @@ class _WritePostState extends State<WritePost> {
   };
   bool netabare=false;
   bool ending=false;
-  CollectionReference works = FirebaseFirestore.instance.collection('works');
+  DocumentReference<Map<String, dynamic>> tags = FirebaseFirestore.instance.collection('tags').doc();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
