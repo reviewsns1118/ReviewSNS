@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'writepost.dart';
 import 'add_work.dart';
-import 'searchwork.dart';
+import 'searchfield.dart';
 
 
 class PostPage extends ConsumerWidget {

@@ -84,8 +84,6 @@ class RegisterPage extends StatelessWidget {
   String password = '';
   CollectionReference users = FirebaseFirestore.instance.collection('users');
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -110,22 +108,20 @@ class RegisterPage extends StatelessWidget {
                 ),
                 decoration: InputDecoration(labelText: 'ニックネーム'),
                 onChanged: (String value) {
-                  nickname=value;
+                  nickname = value;
                 },
               ),
               //ユーザーID入力
               TextFormField(
                 inputFormatters: [
-                  FilteringTextInputFormatter.allow(
-                    RegExp(r'[a-z0-9]')
-                  ),
+                  FilteringTextInputFormatter.allow(RegExp(r'[a-z0-9]')),
                 ],
                 style: const TextStyle(
                   color: Colors.white,
                 ),
                 decoration: InputDecoration(labelText: 'ユーザーID'),
                 onChanged: (String value) {
-                  userid=value;
+                  userid = value;
                 },
               ),
               // メールアドレス入力
@@ -135,7 +131,7 @@ class RegisterPage extends StatelessWidget {
                 ),
                 decoration: InputDecoration(labelText: 'メールアドレス'),
                 onChanged: (String value) {
-                  email=value;
+                  email = value;
                 },
               ),
               // パスワード入力
@@ -146,7 +142,7 @@ class RegisterPage extends StatelessWidget {
                 decoration: InputDecoration(labelText: 'パスワード'),
                 obscureText: true,
                 onChanged: (String value) {
-                  password=value;
+                  password = value;
                 },
               ),
               Container(
@@ -167,7 +163,8 @@ class RegisterPage extends StatelessWidget {
                     try {
                       // メール/パスワードでユーザー登録
                       final FirebaseAuth auth = FirebaseAuth.instance;
-                      UserCredential result = await auth.createUserWithEmailAndPassword(
+                      UserCredential result =
+                          await auth.createUserWithEmailAndPassword(
                         email: email,
                         password: password,
                       );
@@ -232,8 +229,9 @@ class LoginPage extends StatelessWidget {
                 ),
                 decoration: InputDecoration(labelText: 'メールアドレス'),
                 onChanged: (String value) {
-                  email=value;
+                  email = value;
                 },
+                //initialValue: "",
               ),
               // パスワード入力
               TextFormField(
@@ -243,8 +241,9 @@ class LoginPage extends StatelessWidget {
                 decoration: InputDecoration(labelText: 'パスワード'),
                 obscureText: true,
                 onChanged: (String value) {
-                  password=value;
+                  password = value;
                 },
+                //initialValue: "",
               ),
               Container(
                 padding: EdgeInsets.all(8),

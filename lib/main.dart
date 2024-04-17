@@ -7,8 +7,7 @@ import 'package:wotastagram/timeline_page.dart';
 import 'UI.dart';
 import 'login.dart';
 import 'firebase_options.dart';
-
-Future<void> main() async {
+final RouteObserver<ModalRoute> routeObserver = RouteObserver<ModalRoute>();Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -41,6 +40,9 @@ class MyApp extends StatelessWidget {
             return StartPage();
           },
         ),
+        navigatorObservers: [
+          routeObserver,// <-- ここにrouteObserverを設置
+        ],
       );
 }
 

@@ -68,7 +68,7 @@ void initState() {
         ),
         // タイトルテキスト
         title: Text(
-          'Thoughts',
+          'Wotastagram',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontStyle: FontStyle.italic,
