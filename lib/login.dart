@@ -66,7 +66,7 @@ class StartPage extends StatelessWidget {
                   },
                 ),
               ),
-              /*const SizedBox(height: 8),
+              const SizedBox(height: 8),
               Container(
                 width: 200,
                 // ユーザー登録ボタン
@@ -91,7 +91,7 @@ class StartPage extends StatelessWidget {
                     );
                   },
                 ),
-              ),*/
+              ),
             ],
           ),
         ),
