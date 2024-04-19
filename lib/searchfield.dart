@@ -18,7 +18,6 @@ class SearchStateNotifire extends StateNotifier<dynamic> {
 
   // .whereでstring_id_arrayを検索して、候補を表示する
   Future<void> searchWhere(String query,String col,String fie) async {
-    print("うんち");
     final result = await FirebaseFirestore.instance
         .collection(col)
         .where(fie, arrayContains: query)

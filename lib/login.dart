@@ -65,7 +65,33 @@ class StartPage extends StatelessWidget {
                     );
                   },
                 ),
-              )
+              ),
+              /*const SizedBox(height: 8),
+              Container(
+                width: 200,
+                // ユーザー登録ボタン
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.pink,
+                    foregroundColor: Colors.white,
+                  ),
+                  child: Text('developerlogin'),
+                  onPressed: () async {
+                    final FirebaseAuth auth = FirebaseAuth.instance;
+                    await auth.signInWithEmailAndPassword(
+                      email: "reviewsns1118@gmail.com",
+                      password: "Reiji_saikou",
+                    );
+                    // ログインに成功した場合
+                    // チャット画面に遷移＋ログイン画面を破棄
+                    await Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (context) {
+                        return UI(TimelinePage());
+                      }),
+                    );
+                  },
+                ),
+              ),*/
             ],
           ),
         ),
@@ -231,7 +257,7 @@ class LoginPage extends StatelessWidget {
                 onChanged: (String value) {
                   email = value;
                 },
-                //initialValue: "",
+                //initialValue: "reviewsns1118@gmail.com",
               ),
               // パスワード入力
               TextFormField(
@@ -243,7 +269,7 @@ class LoginPage extends StatelessWidget {
                 onChanged: (String value) {
                   password = value;
                 },
-                //initialValue: "",
+                //initialValue: "Reiji_saikou",
               ),
               Container(
                 padding: EdgeInsets.all(8),

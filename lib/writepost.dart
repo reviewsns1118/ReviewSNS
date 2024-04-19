@@ -283,7 +283,7 @@ class _WritePost extends ConsumerState<WritePost> with RouteAware {
                           {
                             // 既に登録されているドキュメントの場合
                             tags.update({
-                              'usenum': tagmap!["usenum"]++,
+                              'usenum': FieldValue.increment(1),
                             })
                           }
                         else
