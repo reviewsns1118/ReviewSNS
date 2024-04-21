@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -7,24 +6,32 @@ import 'package:wotastagram/timeline_page.dart';
 import 'UI.dart';
 import 'login.dart';
 import 'firebase_options.dart';
-final RouteObserver<ModalRoute> routeObserver = RouteObserver<ModalRoute>();Future<void> main() async {
+
+final RouteObserver<ModalRoute> routeObserver = RouteObserver<ModalRoute>();
+
+
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
   runApp(
-      ProviderScope(
-        child: MyApp(),
-      ),
-    );
+    ProviderScope(
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
   @override
   Widget build(BuildContext context) => MaterialApp(
-        title: 'Flutter app',
+        theme: ThemeData(
+          // Materialデザインのバージョンを設定
+          useMaterial3: false,
+        ),
+        title: 'Wotastagram',
         home: StreamBuilder<User?>(
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
@@ -34,15 +41,11 @@ class MyApp extends StatelessWidget {
             }
             if (snapshot.hasData) {
               // User が null でなない、つまりサインイン済みのホーム画面へ
-              return UI(TimelinePage());
+              return UI(const TimelinePage());
             }
             // User が null である、つまり未サインインのサインイン画面へ
             return StartPage();
           },
         ),
-        navigatorObservers: [
-          routeObserver,// <-- ここにrouteObserverを設置
-        ],
       );
 }
-

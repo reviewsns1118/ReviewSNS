@@ -1,11 +1,7 @@
 import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
-
-import 'main.dart';
 
 class Tweet {
   final String nickname;
@@ -18,43 +14,6 @@ class Tweet {
   final String postid;
   Tweet(this.nickname, this.iconUrl, this.work, this.imageURL, this.score,
       this.genre, this.favorite, this.postid);
-}
-
-final List<String> genres = [
-  '映画',
-  '文庫本',
-  '漫画',
-  'アニメ',
-  'ゲーム',
-];
-// ダミーの作品名リスト
-final List<String> sakuhinNames = [
-  'Re:ゼロから始める異世界生活',
-  '進撃の巨人',
-  'ワンピース',
-  '鬼滅の刃',
-  'ナルト',
-  'ハイキュー!!',
-  '僕のヒーローアカデミア',
-  '呪術廻戦',
-  'スライム倒して300年',
-  'リゼロ',
-  'ソードアート・オンライン',
-  '東京リベンジャーズ',
-  'ブラッククローバー',
-  'チェンソーマン',
-  '鋼の錬金術師',
-  'スパイファミリー',
-  'モブサイコ100',
-  'ワールドトリガー',
-  'デスノート',
-  'フルーツバスケット',
-];
-
-// ランダムなスコアを生成する関数
-String generateRandomScore() {
-  final random = math.Random();
-  return (random.nextInt(100) + 1).toString();
 }
 
 // ジャンルに応じたアイコンを取得する関数
@@ -97,10 +56,10 @@ class TimelinePage extends StatefulWidget {
 }
 
 class _TimelinePage extends State<TimelinePage> with RouteAware {
-  Future<String> getDoc(String col, String doc, String fie) async {
+  Future<Map<String, dynamic>?> getDoc(String col, String doc) async {
     DocumentSnapshot<Map<String, dynamic>> snapshot =
         await FirebaseFirestore.instance.collection(col).doc(doc).get();
-    return snapshot.data()![fie];
+    return snapshot.data();
   }
 
   Future<List<String>> getlist() async {
@@ -119,7 +78,7 @@ class _TimelinePage extends State<TimelinePage> with RouteAware {
   Future<List<Tweet>> fmodels() async {
     List postlist = [];
     List<String> favoritelist = await getlist();
-
+    
     await FirebaseFirestore.instance
         .collection('posts')
         .orderBy('date') // 追加日昇順に並び替え
@@ -133,16 +92,18 @@ class _TimelinePage extends State<TimelinePage> with RouteAware {
             ),
           },
         );
-    postlist=List.from(postlist.reversed);
+    postlist = List.from(postlist.reversed);
     List<Tweet> models = [];
     for (int i = 0; i < min(20, postlist.length); i++) {
+      Map<String, dynamic>? user = await getDoc("users", postlist[i]["uid"]);
+      Map<String, dynamic>? work = await getDoc("works", postlist[i]["work"]);
       models.add(Tweet(
-        await getDoc("users", postlist[i]["uid"], "nickname"),
+        user?["nickname"],
         'assets/images/icon${(i % 11) + 1}.png',
-        await getDoc("works", postlist[i]["work"], "title"),
-        await getDoc("works", postlist[i]["work"], "imageURL"),
+        work?["title"],
+        work?["imageURL"],
         postlist[i]["score"],
-        await getDoc("works", postlist[i]["work"], "genre"),
+        work?["genre"],
         favoritelist.contains(postlist[i]["postid"]),
         postlist[i]["postid"],
       ));

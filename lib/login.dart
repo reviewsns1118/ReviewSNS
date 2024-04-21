@@ -70,7 +70,7 @@ class StartPage extends StatelessWidget {
               Container(
                 width: 200,
                 // ユーザー登録ボタン
-                child: ElevatedButton(
+                /*child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.pink,
                     foregroundColor: Colors.white,
@@ -90,7 +90,7 @@ class StartPage extends StatelessWidget {
                       }),
                     );
                   },
-                ),
+                ),*/
               ),
             ],
           ),

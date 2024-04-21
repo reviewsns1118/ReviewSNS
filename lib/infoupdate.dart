@@ -1,12 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'account_page.dart';
 
 class Infoupdate extends StatelessWidget {
-  Infoupdate(this.nickname,this.introduction);
+  Infoupdate(this.nickname,this.introduction, {super.key});
   String nickname = '';
   String introduction='';
   
@@ -18,7 +16,7 @@ class Infoupdate extends StatelessWidget {
         foregroundColor: Colors.white,
         
         // タイトルテキスト
-        title: Text(
+        title: const Text(
           'Thoughts',
           style: TextStyle(
             fontWeight: FontWeight.bold,
@@ -44,7 +42,7 @@ class Infoupdate extends StatelessWidget {
                 
               ),
               initialValue: nickname,
-              decoration: InputDecoration(labelText: 'ニックネーム'),
+              decoration: const InputDecoration(labelText: 'ニックネーム'),
               onChanged: (String value) {
                 nickname=value;
               },
@@ -55,7 +53,7 @@ class Infoupdate extends StatelessWidget {
                 
               ),
               initialValue: introduction,
-              decoration: InputDecoration(labelText: '自己紹介文'),
+              decoration: const InputDecoration(labelText: '自己紹介文'),
               onChanged: (String value) {
                 introduction=value;
               },
@@ -65,7 +63,7 @@ class Infoupdate extends StatelessWidget {
                     backgroundColor: Colors.blue,
                     foregroundColor: Colors.white,
                   ),
-                  child: Text('更新'),
+                  child: const Text('更新'),
                   onPressed: () async {
                     FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).update({
                       'nickname': nickname,
@@ -73,7 +71,7 @@ class Infoupdate extends StatelessWidget {
                     });
                     await Navigator.of(context).pushReplacement(
                       MaterialPageRoute(builder: (context) {
-                        return AccountPage();
+                        return const AccountPage();
                       }),
                     );
                   },

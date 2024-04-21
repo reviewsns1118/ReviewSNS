@@ -5,7 +5,6 @@ import 'writepost.dart';
 import 'add_work.dart';
 import 'searchfield.dart';
 
-
 class PostPage extends ConsumerWidget {
   const PostPage({Key? key}) : super(key: key);
   @override
@@ -16,9 +15,8 @@ class PostPage extends ConsumerWidget {
     final searchState = ref.read(searchStateNotifireProvider.notifier);
     return Scaffold(
       backgroundColor: Colors.black,
-      body:Column(
+      body: Column(
         children: [
-          
           Padding(
             padding: EdgeInsets.symmetric(
               vertical: 12,
@@ -26,15 +24,13 @@ class PostPage extends ConsumerWidget {
             ),
             child: TextField(
               style: TextStyle(
-                fontSize:18,
-                color: Colors.white, 
+                fontSize: 18,
+                color: Colors.white,
               ),
-              decoration: InputDecoration(
-                fillColor: Colors.white,
-                hintText: '作品を検索'
-               ),
-               onSubmitted: (query) {
-                searchState.searchWhere(query,"works","titleOption");
+              decoration:
+                  InputDecoration(fillColor: Colors.white, hintText: '作品を検索'),
+              onSubmitted: (query) {
+                searchState.searchWhere(query, "works", "titleOption");
               },
             ),
           ),
@@ -52,10 +48,11 @@ class PostPage extends ConsumerWidget {
                     result[index]['title'].toString(),
                     style: TextStyle(color: Colors.white),
                   ),
-                  onTap: (){
+                  onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => WritePost(result[index])),
+                      MaterialPageRoute(
+                          builder: (context) => WritePost(result[index])),
                     );
                   },
                 );
@@ -64,28 +61,24 @@ class PostPage extends ConsumerWidget {
           ),
           Text(
             "作品が見つからない時は、ここから追加",
-            style: TextStyle(
-              color: Colors.white
-            ),
+            style: TextStyle(color: Colors.white),
           ),
-          Text("↓",
-            style: TextStyle(
-              color: Colors.white
-            ),
+          Text(
+            "↓",
+            style: TextStyle(color: Colors.white),
           ),
           ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue,
-              foregroundColor: Colors.white,
-            ),
-            onPressed: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Add()),
-              );
-            }, 
-            child: Text("作品を追加")
-          )
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue,
+                foregroundColor: Colors.white,
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Add()),
+                );
+              },
+              child: Text("作品を追加"))
         ],
       ),
     );

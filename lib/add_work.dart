@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'writepost.dart';
 
 class Add extends StatefulWidget {
-  const Add({Key? key}) : super(key: key);
+  const Add({super.key});
 
   @override
   State<Add> createState() => AddWork();
@@ -38,7 +38,7 @@ class AddWork extends State<Add> {
           backgroundColor: Colors.black,
           foregroundColor: Colors.white,
           // タイトルテキスト
-          title: Text(
+          title: const Text(
             'Thoughts',
             style: TextStyle(
               fontWeight: FontWeight.bold,
@@ -51,7 +51,7 @@ class AddWork extends State<Add> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              Align(
+              const Align(
                 alignment: Alignment.topLeft,
                 child: Text(
                   "タイトル(必須)",
@@ -61,17 +61,17 @@ class AddWork extends State<Add> {
                 ),
               ),
               TextField(
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 18,
                   color: Colors.white,
                 ),
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                     fillColor: Colors.white, hintText: '作品名を入力'),
                 onChanged: (String value) {
                   title = value;
                 },
               ),
-              Align(
+              const Align(
                 alignment: Alignment.topLeft,
                 child: Text(
                   "ジャンル(必須)",
@@ -81,7 +81,7 @@ class AddWork extends State<Add> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.symmetric(
+                padding: const EdgeInsets.symmetric(
                   vertical: 12,
                   horizontal: 36,
                 ),
@@ -136,13 +136,13 @@ class AddWork extends State<Add> {
                 alignment: Alignment.topLeft,
                 child: Text(
                   authors[isSelectedValue] ?? "作者",
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
                   ),
                 ),
               ),
               TextField(
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 18,
                   color: Colors.white,
                 ),
@@ -153,7 +153,7 @@ class AddWork extends State<Add> {
                   author = value;
                 },
               ),
-              Align(
+              const Align(
                 alignment: Alignment.topLeft,
                 child: Text(
                   "サムネイル(アスペクト比 4:3 推奨)",
@@ -163,11 +163,11 @@ class AddWork extends State<Add> {
                 ),
               ),
               TextField(
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 18,
                   color: Colors.white,
                 ),
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                     fillColor: Colors.white, hintText: '画像のアドレス'),
                 onChanged: (String value) {
                   setState(() {
@@ -176,17 +176,17 @@ class AddWork extends State<Add> {
                 },
               ),
               TextField(
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 18,
                   color: Colors.white,
                 ),
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                     fillColor: Colors.white, hintText: '引用元URL'),
                 onChanged: (String value) {
                   imageref = value;
                 },
               ),
-              Align(
+              const Align(
                 alignment: Alignment.topLeft,
                 child: Text(
                   "画像のプレビュー",
@@ -209,22 +209,21 @@ class AddWork extends State<Add> {
                     'author': author,
                     'imageURL': imageURL,
                     'imageref': imageref,
-                    'docid' : works.id,
                   });
-                  
+
                   Map<String, dynamic>? d = await getDoc();
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => WritePost(d)),
                   );
                 },
-                child: Text("追加"),
+                child: const Text("追加"),
               )
             ],
           ),
-        )
-    );
+        ));
   }
+
   Future<List<String>> _createNameOption(String value) async {
     var title = value;
     var times = <int>[];
