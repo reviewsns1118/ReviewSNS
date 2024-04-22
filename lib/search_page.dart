@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'writepost.dart';
@@ -10,14 +11,47 @@ class SearchPage extends ConsumerStatefulWidget {
 }
 
 class _SearchPage extends ConsumerState<SearchPage> {
-  String col = "user";
-  String fie ="nicknameOption";
+  String col = "users";
+  String fie = "nicknameOption";
+  String image = "photoURL";
+  String name = "nickname";
+  List<dynamic> doclist=[];
+  List<dynamic> tagwork=[];
+  Future<Map<String, dynamic>?> getDoc(String s) async {
+    DocumentSnapshot<Map<String, dynamic>> snapshot =
+        await FirebaseFirestore.instance.collection('works').doc(s).get();
+    return snapshot.data();
+  }
+
+  Future<void> searchWhere(String query, String col, String fie) async {
+    doclist=[];
+    tagwork=[];
+    final result = await FirebaseFirestore.instance
+        .collection(col)
+        .where(fie, arrayContains: query)
+        .get();
+    // リストに、検索して取得したデータを保存する.
+    for (final doc in result.docs) {
+      setState(() {
+        doclist.add(doc);
+      });
+      print(doc["work"]+"ああああああああああああああああああ");
+      if(col=="tags"){
+        DocumentSnapshot<Map<String, dynamic>> snapshot=await FirebaseFirestore.instance
+        .collection("works")
+        .doc(doc["work"])
+        .get();
+        setState(() {
+          tagwork.add(snapshot.data());
+        });
+        
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    // ListView.builderのitemCountで使用するListのProviderを呼び出す.
-    final result = ref.watch(searchResultProvider);
-    // Firestoreの映画情報を検索するProviderを呼び出す.
-    final searchState = ref.read(searchStateNotifireProvider.notifier);
+
     return Scaffold(
       backgroundColor: Colors.black,
       body: Column(
@@ -28,6 +62,11 @@ class _SearchPage extends ConsumerState<SearchPage> {
                 onPressed: () {
                   setState(() {
                     col = "users";
+                    fie = "nicknameOption";
+                    image = "photoURL";
+                    name = "nickname";
+                    doclist=[];
+                    tagwork=[];
                   });
                 },
                 child: Text("ユーザー"),
@@ -40,6 +79,11 @@ class _SearchPage extends ConsumerState<SearchPage> {
                 onPressed: () {
                   setState(() {
                     col = "tags";
+                    fie = "tagOption";
+                    image = "imageURL";
+                    name = "title";
+                    doclist=[];
+                    tagwork=[];
                   });
                 },
                 child: Text("タグ"),
@@ -52,7 +96,11 @@ class _SearchPage extends ConsumerState<SearchPage> {
                 onPressed: () {
                   setState(() {
                     col = "works";
-                    fie= "titleOption";
+                    fie = "titleOption";
+                    image = "imageURL";
+                    name = "title";
+                    doclist=[];
+                    tagwork=[];
                   });
                 },
                 child: Text("作品"),
@@ -75,56 +123,39 @@ class _SearchPage extends ConsumerState<SearchPage> {
               ),
               decoration:
                   InputDecoration(fillColor: Colors.white, hintText: '作品を検索'),
-              onSubmitted: (query) {
-                searchState.searchWhere(query, col, "titleOption");
+              onSubmitted: (query) async {
+                  searchWhere(query, col, fie);
+                  print("$tagwork+あああああああああああ");
               },
             ),
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: result.length, // リストの数をlengthで数える.
+              itemCount: doclist.length, // リストの数をlengthで数える.
               itemBuilder: (context, index) {
                 return ListTile(
                   leading: Image.network(
-                    result[index]['imageURL'].toString(),
+                    col == "tags"
+                        ? tagwork[index]["imageURL"]??Colors.white
+                        : doclist[index][image],
                     height: 60,
                     width: 80,
                   ),
                   title: Text(
-                    result[index]['title'].toString(),
+                    col == "tags"
+                        ? tagwork[index]["title"]??""
+                        : doclist[index][name],
                     style: TextStyle(color: Colors.white),
                   ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => WritePost(result[index])),
-                    );
-                  },
+                  trailing: Text(
+                    col == "tags" ? doclist[index]["tagname"]??"" : "",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  onTap: () {},
                 );
               },
             ),
           ),
-          Text(
-            "作品が見つからない時は、ここから追加",
-            style: TextStyle(color: Colors.white),
-          ),
-          Text(
-            "↓",
-            style: TextStyle(color: Colors.white),
-          ),
-          ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
-                foregroundColor: Colors.white,
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Add()),
-                );
-              },
-              child: Text("作品を追加"))
         ],
       ),
     );

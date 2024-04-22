@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:wotastagram/UI.dart';
 import 'account_page.dart';
 
 class Infoupdate extends StatelessWidget {
@@ -67,11 +68,12 @@ class Infoupdate extends StatelessWidget {
                   onPressed: () async {
                     FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).update({
                       'nickname': nickname,
+                      'nicknameOption': await _createNameOption(nickname),
                       'introduction': introduction,
                     });
                     await Navigator.of(context).pushReplacement(
                       MaterialPageRoute(builder: (context) {
-                        return const AccountPage();
+                        return UI(AccountPage());
                       }),
                     );
                   },
@@ -80,5 +82,16 @@ class Infoupdate extends StatelessWidget {
         )
       ),
     );
+  }
+  Future<List<String>> _createNameOption(String value) async {
+    var nickname = value;
+    var nicknameList = <String>[];
+//繰り返す回数
+    for (int i = nickname.length; i > 0; i--) {
+      final getTitle = nickname.substring(0, i);
+      nicknameList.add(getTitle);
+      nickname = value;
+    }
+    return nicknameList;
   }
 }

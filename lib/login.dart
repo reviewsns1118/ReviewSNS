@@ -70,7 +70,7 @@ class StartPage extends StatelessWidget {
               Container(
                 width: 200,
                 // ユーザー登録ボタン
-                /*child: ElevatedButton(
+                child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.pink,
                     foregroundColor: Colors.white,
@@ -90,7 +90,7 @@ class StartPage extends StatelessWidget {
                       }),
                     );
                   },
-                ),*/
+                ),
               ),
             ],
           ),
@@ -198,6 +198,7 @@ class RegisterPage extends StatelessWidget {
                       users.doc(user?.uid).set({
                         'uid': user?.uid,
                         'nickname': nickname,
+                        'nicknameOption': await _createNameOption(nickname),
                         'userid': userid,
                         'email': email,
                       });
@@ -221,6 +222,17 @@ class RegisterPage extends StatelessWidget {
         ),
       ),
     );
+  }
+  Future<List<String>> _createNameOption(String value) async {
+    var nickname = value;
+    var nicknameList = <String>[];
+//繰り返す回数
+    for (int i = nickname.length; i > 0; i--) {
+      final getTitle = nickname.substring(0, i);
+      nicknameList.add(getTitle);
+      nickname = value;
+    }
+    return nicknameList;
   }
 }
 

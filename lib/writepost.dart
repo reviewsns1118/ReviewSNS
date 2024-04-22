@@ -278,7 +278,7 @@ class _WritePost extends ConsumerState<WritePost> with RouteAware {
                           .collection('tags')
                           .doc(document!['docid'] + usingtags[i]);
                   Map<String, dynamic>? tagmap = await getDoc(tags);
-                  tags.get().then((docSnapshot) => {
+                  tags.get().then((docSnapshot) async => {
                         if (docSnapshot.exists)
                           {
                             // 既に登録されているドキュメントの場合
@@ -291,6 +291,7 @@ class _WritePost extends ConsumerState<WritePost> with RouteAware {
                             // 登録されてない新しいドキュメントの場合
                             tags.set({
                               'tagname': usingtags[i],
+                              'tagOption': await _createNameOption(usingtags[i]),
                               'usenum': 1,
                               'work': document!['docid'],
                             })
@@ -309,5 +310,16 @@ class _WritePost extends ConsumerState<WritePost> with RouteAware {
         ),
       ),
     );
+  }
+  Future<List<String>> _createNameOption(String value) async {
+    var tag = value;
+    var tagList = <String>[];
+//繰り返す回数
+    for (int i = tag.length; i > 0; i--) {
+      final getTitle = tag.substring(0, i);
+      tagList.add(getTitle);
+      tag = value;
+    }
+    return tagList;
   }
 }

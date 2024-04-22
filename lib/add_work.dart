@@ -226,23 +226,12 @@ class AddWork extends State<Add> {
 
   Future<List<String>> _createNameOption(String value) async {
     var title = value;
-    var times = <int>[];
-//分割する文字数（かつ回数）を規定（大きい数順で２文字目まで）
-    for (int i = title.length; i >= 1; i--) {
-      times.add(i);
-    }
     var titleList = <String>[];
-    for (int time in times) {
 //繰り返す回数
-      for (int i = title.length; i >= 0; i--) {
-//１ずつ数字を減らしていく（１文字以上、名前の文字数以下の分割Gramが生成される）
-        if (i + time <= title.length) {
-//文字数を超えて分割の後ろを指定できないので、if分で制御
-          final getTitle = title.substring(i, i + time);
-          titleList.add(getTitle);
-          title = value;
-        }
-      }
+    for (int i = title.length; i > 0; i--) {
+      final getTitle = title.substring(0, i);
+      titleList.add(getTitle);
+      title = value;
     }
     return titleList;
   }
