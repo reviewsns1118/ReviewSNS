@@ -35,7 +35,6 @@ class _SearchPage extends ConsumerState<SearchPage> {
       setState(() {
         doclist.add(doc);
       });
-      print(doc["work"]+"ああああああああああああああああああ");
       if(col=="tags"){
         DocumentSnapshot<Map<String, dynamic>> snapshot=await FirebaseFirestore.instance
         .collection("works")
@@ -125,7 +124,6 @@ class _SearchPage extends ConsumerState<SearchPage> {
                   InputDecoration(fillColor: Colors.white, hintText: '作品を検索'),
               onSubmitted: (query) async {
                   searchWhere(query, col, fie);
-                  print("$tagwork+あああああああああああ");
               },
             ),
           ),
