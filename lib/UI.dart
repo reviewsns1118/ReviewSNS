@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'main.dart';
 import 'login.dart';
 import 'timeline_page.dart';
 import 'search_page.dart';
@@ -8,29 +10,68 @@ import 'Account_page.dart';
 
 class UI extends StatefulWidget {
   UI(this.page, {super.key});
-  Widget page;
+  int page;
   @override
   _UIState createState() => _UIState(page);
 }
 
-class _UIState extends State<UI> {
-  _UIState(this.page);
-  Widget page;
-  late List<Widget> pages;
-  int _currentIndex = 0;
-  IconData _icon = Icons.account_circle;
-  Color _color = Colors.black;
+class _UIState extends State<UI> with RouteAware {
+  _UIState(this._currentIndex);
+  int _currentIndex;
+  List<Widget> pages = [
+      TimelinePage(),
+      SearchPage(),
+      PostPage(),
+      AccountPage(),
+    ];
+  List<IconData> _icon = [
+    Icons.account_circle,
+    Icons.account_circle,
+    Icons.account_circle,
+    Icons.logout,
+  ];
+  List<FontStyle> fontstyle=[
+    FontStyle.italic,
+    FontStyle.normal,
+    FontStyle.normal,
+    FontStyle.italic,
+  ];
+  String userid="Guest";
+  Future<void> getUser() async {
+    DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+        .instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get();
+    setState(() {
+      userid=snapshot.data()!["userid"]??"Guest";
+    });
+  }
+  List<String> title=[
+    "Thoughts",
+    "検索",
+    "レビューする作品を選択",
+    "",
+  ];
 
   @override
-  void initState() {
-    pages = [
-      const TimelinePage(),
-      SearchPage(),
-      const PostPage(),
-      const AccountPage(),
-    ];
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    routeObserver.subscribe(this, ModalRoute.of(context)!);
   }
+
+  @override
+  void dispose() {
+    routeObserver.unsubscribe(this);
+    super.dispose();
+  }
+
+  @override
+  Future<void> didPush() async {
+    await getUser();
+    title[3]=userid;
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +82,7 @@ class _UIState extends State<UI> {
         // 左側のアイコン
         leading: IconButton(
           style: IconButton.styleFrom(
-              foregroundColor: Colors.white, backgroundColor: _color),
+              foregroundColor: Colors.white),
           onPressed: () async {
             if (_currentIndex == 3) {
               await FirebaseAuth.instance.signOut();
@@ -53,21 +94,18 @@ class _UIState extends State<UI> {
               );
             } else {
               setState(() {
-                page = const AccountPage();
-                _color = Colors.red;
-                _icon = Icons.logout;
                 _currentIndex = 3;
               });
             }
           },
-          icon: Icon(_icon),
+          icon: Icon(_icon[_currentIndex]),
         ),
         // タイトルテキスト
-        title: const Text(
-          'Thoughts',
+        title: Text(
+          title[_currentIndex],
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            fontStyle: FontStyle.italic,
+            fontStyle: fontstyle[_currentIndex],
           ),
         ),
         centerTitle: true,
@@ -79,7 +117,7 @@ class _UIState extends State<UI> {
           ),
         ],
       ),
-      body: page,
+      body: pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.black,
@@ -89,14 +127,6 @@ class _UIState extends State<UI> {
         onTap: (index) {
           setState(() {
             _currentIndex = index;
-            page = pages[index];
-            if (index == 3) {
-              _color = Colors.red;
-              _icon = Icons.logout;
-            } else {
-              _color = Colors.black;
-              _icon = Icons.account_circle;
-            }
           });
         },
         items: const [

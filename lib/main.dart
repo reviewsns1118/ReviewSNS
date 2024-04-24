@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
             }
             if (snapshot.hasData) {
               // User が null でなない、つまりサインイン済みのホーム画面へ
-              return UI(const TimelinePage());
+              return UI(0);
             }
             // User が null である、つまり未サインインのサインイン画面へ
             return StartPage();

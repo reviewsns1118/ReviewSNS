@@ -301,7 +301,7 @@ class _WritePost extends ConsumerState<WritePost> with RouteAware {
 
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => UI(TimelinePage())),
+                  MaterialPageRoute(builder: (context) => UI(0)),
                 );
               },
               child: Text("投稿"),

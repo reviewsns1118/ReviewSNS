@@ -86,7 +86,7 @@ class StartPage extends StatelessWidget {
                     // チャット画面に遷移＋ログイン画面を破棄
                     await Navigator.of(context).pushReplacement(
                       MaterialPageRoute(builder: (context) {
-                        return UI(TimelinePage());
+                        return UI(0);
                       }),
                     );
                   },
@@ -200,13 +200,14 @@ class RegisterPage extends StatelessWidget {
                         'nickname': nickname,
                         'nicknameOption': await _createNameOption(nickname),
                         'userid': userid,
+                        'useridOption': await _createNameOption(userid),
                         'email': email,
                       });
                       // ユーザー登録に成功した場合
                       // チャット画面に遷移＋ログイン画面を破棄
                       await Navigator.of(context).pushReplacement(
                         MaterialPageRoute(builder: (context) {
-                          return UI(TimelinePage());
+                          return UI(0);
                         }),
                       );
                     } catch (e) {
@@ -309,7 +310,7 @@ class LoginPage extends StatelessWidget {
                       // チャット画面に遷移＋ログイン画面を破棄
                       await Navigator.of(context).pushReplacement(
                         MaterialPageRoute(builder: (context) {
-                          return UI(TimelinePage());
+                          return UI(0);
                         }),
                       );
                     } catch (e) {

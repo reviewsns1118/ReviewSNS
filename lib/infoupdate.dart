@@ -73,7 +73,7 @@ class Infoupdate extends StatelessWidget {
                     });
                     await Navigator.of(context).pushReplacement(
                       MaterialPageRoute(builder: (context) {
-                        return UI(AccountPage());
+                        return UI(3);
                       }),
                     );
                   },
