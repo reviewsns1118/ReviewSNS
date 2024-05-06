@@ -1,12 +1,9 @@
-import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:wotastagram/UI.dart';
-import 'main.dart';
-import 'timeline_page.dart';
 
 class StartPage extends StatelessWidget {
   @override
@@ -41,10 +38,7 @@ class StartPage extends StatelessWidget {
                   ),
                   child: Text('ユーザー登録'),
                   onPressed: () async {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => RegisterPage()),
-                    );
+                    context.goNamed('register');
                   },
                 ),
               ),
@@ -59,10 +53,7 @@ class StartPage extends StatelessWidget {
                   ),
                   child: Text('ログイン'),
                   onPressed: () async {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginPage()),
-                    );
+                    context.goNamed('login');
                   },
                 ),
               ),
@@ -84,10 +75,9 @@ class StartPage extends StatelessWidget {
                     );
                     // ログインに成功した場合
                     // チャット画面に遷移＋ログイン画面を破棄
-                    await Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (context) {
-                        return UI(0);
-                      }),
+                    context.goNamed(
+                      'home',
+                      extra: 0,
                     );
                   },
                 ),
@@ -108,7 +98,7 @@ class RegisterPage extends StatelessWidget {
   String userid = '';
   String email = '';
   String password = '';
-  CollectionReference users = FirebaseFirestore.instance.collection('users');
+  final CollectionReference users = FirebaseFirestore.instance.collection('users');
 
   @override
   Widget build(BuildContext context) {
@@ -205,10 +195,9 @@ class RegisterPage extends StatelessWidget {
                       });
                       // ユーザー登録に成功した場合
                       // チャット画面に遷移＋ログイン画面を破棄
-                      await Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (context) {
-                          return UI(0);
-                        }),
+                      context.goNamed(
+                        'home',
+                        extra: 0,
                       );
                     } catch (e) {
                       // ユーザー登録に失敗した場合
@@ -308,10 +297,9 @@ class LoginPage extends StatelessWidget {
                       );
                       // ログインに成功した場合
                       // チャット画面に遷移＋ログイン画面を破棄
-                      await Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (context) {
-                          return UI(0);
-                        }),
+                      context.goNamed(
+                        'home',
+                        extra: 0,
                       );
                     } catch (e) {
                       // ログインに失敗した場合

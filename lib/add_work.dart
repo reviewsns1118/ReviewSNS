@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:go_router/go_router.dart';
 import 'writepost.dart';
 
 class Add extends StatefulWidget {
@@ -212,9 +213,9 @@ class AddWork extends State<Add> {
                   });
 
                   Map<String, dynamic>? d = await getDoc();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => WritePost(d)),
+                  context.goNamed(
+                    "writepostfromaddwork",
+                    extra: d,
                   );
                 },
                 child: const Text("追加"),

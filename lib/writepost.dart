@@ -5,9 +5,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'main.dart';
 import 'UI.dart';
-import 'timeline_page.dart';
 
 final writeprovider = Provider((ref) => "write");
 
@@ -71,9 +71,12 @@ class _WritePost extends ConsumerState<WritePost> with RouteAware {
   }
 
   @override
-  void didPush() {
-    searchWhere(document!["docid"], "tags", "work");
-    poptag.sort((a, b) => b["usenum"].compareTo(a["usenum"]));
+  Future<void> didPush() async {
+    await searchWhere(document!["docid"], "tags", "work");
+    print(poptag);
+    setState(() {
+      poptag.sort((a, b) => b["usenum"].compareTo(a["usenum"]));
+    });
   }
 
   @override
@@ -241,7 +244,10 @@ class _WritePost extends ConsumerState<WritePost> with RouteAware {
                 },
               ),
             ),
-            Text("追加するタグ(最大10個まで)"),
+            Text(
+              "追加するタグ(最大10個まで)",
+              style: TextStyle(color: Colors.white),
+            ),
             ListView.builder(
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
@@ -277,7 +283,6 @@ class _WritePost extends ConsumerState<WritePost> with RouteAware {
                       FirebaseFirestore.instance
                           .collection('tags')
                           .doc(document!['docid'] + usingtags[i]);
-                  Map<String, dynamic>? tagmap = await getDoc(tags);
                   tags.get().then((docSnapshot) async => {
                         if (docSnapshot.exists)
                           {
@@ -291,17 +296,17 @@ class _WritePost extends ConsumerState<WritePost> with RouteAware {
                             // 登録されてない新しいドキュメントの場合
                             tags.set({
                               'tagname': usingtags[i],
-                              'tagOption': await _createNameOption(usingtags[i]),
+                              'tagOption':
+                                  await _createNameOption(usingtags[i]),
                               'usenum': 1,
                               'work': document!['docid'],
                             })
                           }
                       });
                 }
-
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => UI(0)),
+                context.goNamed(
+                  "home",
+                  extra: 0,
                 );
               },
               child: Text("投稿"),
@@ -311,6 +316,7 @@ class _WritePost extends ConsumerState<WritePost> with RouteAware {
       ),
     );
   }
+
   Future<List<String>> _createNameOption(String value) async {
     var tag = value;
     var tagList = <String>[];

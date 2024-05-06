@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:go_router/go_router.dart';
 import 'infoupdate.dart';
 
 class Tweet {
@@ -52,14 +51,17 @@ Color getColorForScore(int score) {
   }
 }
 
-class AccountPage extends StatefulWidget {
-  const AccountPage({Key? key}) : super(key: key);
-
+class OtherAccountPage extends StatefulWidget {
+  OtherAccountPage(this.uid);
+  final String uid;
   @override
-  _AccountPageState createState() => _AccountPageState();
+  _OtherAccountPageState createState() => _OtherAccountPageState(uid);
 }
 
-class _AccountPageState extends State<AccountPage> {
+class _OtherAccountPageState extends State<OtherAccountPage> {
+  _OtherAccountPageState(this.uid);
+  String uid;
+
   Future<Map<String, dynamic>?> getDoc(String col, String doc) async {
     DocumentSnapshot<Map<String, dynamic>> snapshot =
         await FirebaseFirestore.instance.collection(col).doc(doc).get();
@@ -102,7 +104,7 @@ class _AccountPageState extends State<AccountPage> {
     List<String> favoritelist = await getlist();
     await FirebaseFirestore.instance
         .collection('posts')
-        .where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .where('uid', isEqualTo: uid)
         .orderBy(orderfie,descending: orderbool)
         .get()
         .then(
@@ -280,14 +282,34 @@ class _AccountPageState extends State<AccountPage> {
     DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
         .instance
         .collection('users')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .doc(uid)
         .get();
     return snapshot.data()![s] ?? "";
   }
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        foregroundColor: Colors.white,        
+        // タイトルテキスト
+        title: FutureBuilder(
+              future: getUser('userid'),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                return Text(
+                  snapshot.data ?? "Guest",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontStyle: FontStyle.italic
+                  ),
+                );
+              },
+            ),
+        centerTitle: true,
+      ),
+      body:DefaultTabController(
       length: 5,
       child: Scaffold(
         backgroundColor: Colors.black,
@@ -306,11 +328,7 @@ class _AccountPageState extends State<AccountPage> {
                   color: Colors.white,
                   iconSize: 80,
                   onPressed: () async {
-                    String nickname = await getUser('nickname');
-                    String introduction = await getUser('introduction');
-                    context.goNamed(
-                      "infoupdate",
-                    );
+                    
                   },
                 ),
               ],
@@ -423,7 +441,10 @@ class _AccountPageState extends State<AccountPage> {
           ],
         ),
       ),
+    )
     );
+    
+    
   }
 
   Widget buildDropdown(String category) {

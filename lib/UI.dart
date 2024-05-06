@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'main.dart';
 import 'login.dart';
 import 'timeline_page.dart';
@@ -10,7 +11,7 @@ import 'Account_page.dart';
 
 class UI extends StatefulWidget {
   UI(this.page, {super.key});
-  int page;
+  final int page;
   @override
   _UIState createState() => _UIState(page);
 }
@@ -87,11 +88,7 @@ class _UIState extends State<UI> with RouteAware {
             if (_currentIndex == 3) {
               await FirebaseAuth.instance.signOut();
               // ログイン画面に遷移＋チャット画面を破棄
-              await Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) {
-                  return StartPage();
-                }),
-              );
+              context.goNamed('start');
             } else {
               setState(() {
                 _currentIndex = 3;

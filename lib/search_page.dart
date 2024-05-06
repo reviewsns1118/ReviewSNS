@@ -1,9 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'writepost.dart';
-import 'add_work.dart';
-import 'searchfield.dart';
+import 'package:go_router/go_router.dart';
+import 'package:wotastagram/othersAccount.dart';
 
 class SearchPage extends ConsumerStatefulWidget {
   @override
@@ -65,201 +64,214 @@ class _SearchPage extends ConsumerState<SearchPage> {
       backgroundColor: Colors.black,
       body: Column(
         children: [
-          Row(
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    col = "users";
-                    fie = "nicknameOption";
-                    image = "photoURL";
-                    name = "nickname";
-                    genre = "";
-                    doclist = [];
-                    tagwork = [];
-                  });
-                },
-                child: Text("ユーザー"),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: col == "users" ? Colors.blue : Colors.white,
-                  foregroundColor: col == "users" ? Colors.white : Colors.black,
+          Center(
+            child: Row(
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      col = "users";
+                      fie = "nicknameOption";
+                      image = "photoURL";
+                      name = "nickname";
+                      genre = "";
+                      doclist = [];
+                      tagwork = [];
+                    });
+                  },
+                  child: Text("ユーザー"),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                        col == "users" ? Colors.blue : Colors.white,
+                    foregroundColor:
+                        col == "users" ? Colors.white : Colors.black,
+                  ),
                 ),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    col = "tags";
-                    fie = "tagOption";
-                    image = "imageURL";
-                    name = "title";
-                    genre = "";
-                    doclist = [];
-                    tagwork = [];
-                  });
-                },
-                child: Text("タグ"),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: col == "tags" ? Colors.blue : Colors.white,
-                  foregroundColor: col == "tags" ? Colors.white : Colors.black,
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      col = "tags";
+                      fie = "tagOption";
+                      image = "imageURL";
+                      name = "title";
+                      genre = "";
+                      doclist = [];
+                      tagwork = [];
+                    });
+                  },
+                  child: Text("タグ"),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: col == "tags" ? Colors.blue : Colors.white,
+                    foregroundColor:
+                        col == "tags" ? Colors.white : Colors.black,
+                  ),
                 ),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    col = "works";
-                    fie = "titleOption";
-                    image = "imageURL";
-                    name = "title";
-                    genre = "";
-                    doclist = [];
-                    tagwork = [];
-                  });
-                },
-                child: Text("作品"),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: col == "works" ? Colors.blue : Colors.white,
-                  foregroundColor: col == "works" ? Colors.white : Colors.black,
-                ),
-              )
-            ],
-          ),
-          col == "works" || col == "tags"
-              ? Row(
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          genre = "";
-                        });
-                      },
-                      child: Text("全て"),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            genre == "" ? Colors.blue : Colors.white,
-                        foregroundColor:
-                            genre == "" ? Colors.white : Colors.black,
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          genre = "映画";
-                          doclist = [];
-                          tagwork = [];
-                        });
-                      },
-                      child: Text("映画"),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            genre == "映画" ? Colors.blue : Colors.white,
-                        foregroundColor:
-                            genre == "映画" ? Colors.white : Colors.black,
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          genre = "文庫本";
-                          doclist = [];
-                          tagwork = [];
-                        });
-                      },
-                      child: Text("文庫本"),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            genre == "文庫本" ? Colors.blue : Colors.white,
-                        foregroundColor:
-                            genre == "文庫本" ? Colors.white : Colors.black,
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          genre = "漫画";
-                          doclist = [];
-                          tagwork = [];
-                        });
-                      },
-                      child: Text("漫画"),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            genre == "漫画" ? Colors.blue : Colors.white,
-                        foregroundColor:
-                            genre == "漫画" ? Colors.white : Colors.black,
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          genre = "アニメ";
-                          doclist = [];
-                          tagwork = [];
-                        });
-                      },
-                      child: Text("アニメ"),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            genre == "アニメ" ? Colors.blue : Colors.white,
-                        foregroundColor:
-                            genre == "アニメ" ? Colors.white : Colors.black,
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          genre = "ゲーム";
-                          doclist = [];
-                          tagwork = [];
-                        });
-                      },
-                      child: Text("ゲーム"),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            genre == "ゲーム" ? Colors.blue : Colors.white,
-                        foregroundColor:
-                            genre == "ゲーム" ? Colors.white : Colors.black,
-                      ),
-                    ),
-                  ],
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      col = "works";
+                      fie = "titleOption";
+                      image = "imageURL";
+                      name = "title";
+                      genre = "";
+                      doclist = [];
+                      tagwork = [];
+                    });
+                  },
+                  child: Text("作品"),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                        col == "works" ? Colors.blue : Colors.white,
+                    foregroundColor:
+                        col == "works" ? Colors.white : Colors.black,
+                  ),
                 )
-              : Row(
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          fie = "nicknameOption";
-                          doclist = [];
-                          tagwork = [];
-                        });
-                      },
-                      child: Text("ユーザー名"),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: fie == "nicknameOption"
-                            ? Colors.blue
-                            : Colors.white,
-                        foregroundColor: fie == "nicknameOption"
-                            ? Colors.white
-                            : Colors.black,
+              ],
+            ),
+          ),
+          SingleChildScrollView(
+            //スクロール
+            scrollDirection: Axis.horizontal, //スクロールの方向、水平
+            child: col == "works" || col == "tags"
+                ? Row(
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            genre = "";
+                          });
+                        },
+                        child: Text("全て"),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              genre == "" ? Colors.blue : Colors.white,
+                          foregroundColor:
+                              genre == "" ? Colors.white : Colors.black,
+                        ),
                       ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          fie = "useridOption";
-                          doclist = [];
-                          tagwork = [];
-                        });
-                      },
-                      child: Text("ユーザーID"),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            fie == "useridOption" ? Colors.blue : Colors.white,
-                        foregroundColor:
-                            fie == "useridOption" ? Colors.white : Colors.black,
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            genre = "映画";
+                            doclist = [];
+                            tagwork = [];
+                          });
+                        },
+                        child: Text("映画"),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              genre == "映画" ? Colors.blue : Colors.white,
+                          foregroundColor:
+                              genre == "映画" ? Colors.white : Colors.black,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            genre = "文庫本";
+                            doclist = [];
+                            tagwork = [];
+                          });
+                        },
+                        child: Text("文庫本"),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              genre == "文庫本" ? Colors.blue : Colors.white,
+                          foregroundColor:
+                              genre == "文庫本" ? Colors.white : Colors.black,
+                        ),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            genre = "漫画";
+                            doclist = [];
+                            tagwork = [];
+                          });
+                        },
+                        child: Text("漫画"),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              genre == "漫画" ? Colors.blue : Colors.white,
+                          foregroundColor:
+                              genre == "漫画" ? Colors.white : Colors.black,
+                        ),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            genre = "アニメ";
+                            doclist = [];
+                            tagwork = [];
+                          });
+                        },
+                        child: Text("アニメ"),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              genre == "アニメ" ? Colors.blue : Colors.white,
+                          foregroundColor:
+                              genre == "アニメ" ? Colors.white : Colors.black,
+                        ),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            genre = "ゲーム";
+                            doclist = [];
+                            tagwork = [];
+                          });
+                        },
+                        child: Text("ゲーム"),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              genre == "ゲーム" ? Colors.blue : Colors.white,
+                          foregroundColor:
+                              genre == "ゲーム" ? Colors.white : Colors.black,
+                        ),
+                      ),
+                    ],
+                  )
+                : Row(
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            fie = "nicknameOption";
+                            doclist = [];
+                            tagwork = [];
+                          });
+                        },
+                        child: Text("ユーザー名"),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: fie == "nicknameOption"
+                              ? Colors.blue
+                              : Colors.white,
+                          foregroundColor: fie == "nicknameOption"
+                              ? Colors.white
+                              : Colors.black,
+                        ),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            fie = "useridOption";
+                            doclist = [];
+                            tagwork = [];
+                          });
+                        },
+                        child: Text("ユーザーID"),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: fie == "useridOption"
+                              ? Colors.blue
+                              : Colors.white,
+                          foregroundColor: fie == "useridOption"
+                              ? Colors.white
+                              : Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+          ),
           Padding(
             padding: EdgeInsets.symmetric(
               vertical: 12,
@@ -299,7 +311,14 @@ class _SearchPage extends ConsumerState<SearchPage> {
                     col == "tags" ? doclist[index]["tagname"] ?? "" : "",
                     style: TextStyle(color: Colors.white),
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    if (col == "users") {
+                      context.goNamed(
+                        "accounts",
+                        pathParameters: {"uid": doclist[index]["uid"]},
+                      );
+                    }
+                  },
                 );
               },
             ),

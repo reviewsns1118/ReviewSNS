@@ -1,6 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'writepost.dart';
 import 'add_work.dart';
 import 'searchfield.dart';
@@ -49,11 +49,7 @@ class PostPage extends ConsumerWidget {
                     style: TextStyle(color: Colors.white),
                   ),
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => WritePost(result[index])),
-                    );
+                    context.goNamed('writepost',extra: result[index]);
                   },
                 );
               },
@@ -73,10 +69,7 @@ class PostPage extends ConsumerWidget {
                 foregroundColor: Colors.white,
               ),
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Add()),
-                );
+                context.goNamed('addwork');
               },
               child: Text("作品を追加"))
         ],

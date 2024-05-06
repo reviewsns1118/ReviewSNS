@@ -2,6 +2,8 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'posts.dart';
 
 class Tweet {
   final String nickname;
@@ -55,7 +57,11 @@ class TimelinePage extends StatefulWidget {
   State<TimelinePage> createState() => _TimelinePage();
 }
 
-class _TimelinePage extends State<TimelinePage> with RouteAware {
+class _TimelinePage extends State<TimelinePage>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   Future<Map<String, dynamic>?> getDoc(String col, String doc) async {
     DocumentSnapshot<Map<String, dynamic>> snapshot =
         await FirebaseFirestore.instance.collection(col).doc(doc).get();
@@ -78,7 +84,7 @@ class _TimelinePage extends State<TimelinePage> with RouteAware {
   Future<List<Tweet>> fmodels() async {
     List postlist = [];
     List<String> favoritelist = await getlist();
-    
+
     await FirebaseFirestore.instance
         .collection('posts')
         .orderBy('date') // 追加日昇順に並び替え
@@ -239,20 +245,29 @@ class _TimelinePage extends State<TimelinePage> with RouteAware {
     );
 
     // obiとnaiyouをColumnで縦に並べる
-    return Container(
-      padding: const EdgeInsets.all(5),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          obi,
-          naiyou,
-        ],
+    return InkWell(
+      onTap: () {
+        context.goNamed(
+          'posts',
+          pathParameters: {'postid': model.postid},
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.all(5),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            obi,
+            naiyou,
+          ],
+        ),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       backgroundColor: Colors.black, // Scaffoldの背景色を黒に設定
       body: FutureBuilder(
@@ -274,7 +289,7 @@ class _TimelinePage extends State<TimelinePage> with RouteAware {
                   mainAxisSpacing: 0, // アイテム間の垂直スペース
                   childAspectRatio: 13 / 13,
                 ),
-                itemCount: models!.length,
+                itemCount: models.length,
                 itemBuilder: (context, index) {
                   // ここで各投稿をウィジェットに変換
 
