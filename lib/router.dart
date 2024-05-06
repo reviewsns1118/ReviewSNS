@@ -89,6 +89,13 @@ final goRouter = GoRouter(
           },
         ),
         GoRoute(
+          name: 'writepostfrompostpage',
+          path: 'writepost',
+          builder: (context, state) {
+            return WritePost(state.extra as Map<String, dynamic>?);
+          },
+        ),
+        GoRoute(
           name: 'accounts',
           path: 'accounts/:uid',
           builder: (context, state) {

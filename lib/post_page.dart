@@ -1,14 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'writepost.dart';
-import 'add_work.dart';
 import 'searchfield.dart';
 
-class PostPage extends ConsumerWidget {
-  const PostPage({Key? key}) : super(key: key);
+
+
+class PostPage extends ConsumerStatefulWidget {
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<PostPage> createState() => PostPageState();
+}
+
+class PostPageState extends ConsumerState<PostPage> {
+
+  String word="";
+
+  @override
+  Widget build(BuildContext context) {
     // ListView.builderのitemCountで使用するListのProviderを呼び出す.
     final result = ref.watch(searchResultProvider);
     // Firestoreの映画情報を検索するProviderを呼び出す.
@@ -19,20 +27,39 @@ class PostPage extends ConsumerWidget {
         children: [
           Padding(
             padding: EdgeInsets.symmetric(
-              vertical: 12,
-              horizontal: 36,
+              vertical: 5,
+              horizontal: 10,
             ),
             child: TextField(
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.white,
-              ),
-              decoration:
-                  InputDecoration(fillColor: Colors.white, hintText: '作品を検索'),
-              onSubmitted: (query) {
-                searchState.searchWhere(query, "works", "titleOption");
-              },
-            ),
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.white,
+                ),
+                decoration: InputDecoration(
+                  hintText: '作品を検索',
+                  hintStyle: TextStyle(color: Colors.white),
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    // 非フォーカス時の枠線のスタイルを指定
+                    borderSide: BorderSide(color: Colors.white),
+                  ),
+                ),
+                onChanged: (query) {
+                  setState(() {
+                    word=query;
+                  });
+                  if (query.isEmpty) {
+                    searchState.searchWhere(" ", "works", "titleOption");
+                  } else {
+                    searchState.searchWhere(query, "works", "titleOption");
+                  }
+                }),
+          ),
+          Text(
+            "${word}の検索結果:${result.length}件の作品",
+            style: TextStyle(color: Colors.white),
           ),
           Expanded(
             child: ListView.builder(
@@ -49,7 +76,7 @@ class PostPage extends ConsumerWidget {
                     style: TextStyle(color: Colors.white),
                   ),
                   onTap: () {
-                    context.goNamed('writepost',extra: result[index]);
+                    context.goNamed('writepostfrompostpage',extra: result[index]);
                   },
                 );
               },
