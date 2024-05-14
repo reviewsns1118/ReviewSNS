@@ -22,6 +22,9 @@ class PostsState extends State<Posts> with RouteAware {
   Map<String, dynamic>? user;
   Map<String, dynamic>? work;
   List<dynamic> favoritepost = [];
+  List postlist = [];
+  List otherpost = [];
+  num sumscore = 0;
 
   @override
   void didChangeDependencies() {
@@ -55,7 +58,7 @@ class PostsState extends State<Posts> with RouteAware {
     }
   }
 
-  Color getColorForScore(int score) {
+  Color getColorForScore(double score) {
     // スコアを整数に変換。不正な値があれば0とする
 
     if (score >= 90 && score <= 100) {
@@ -90,7 +93,7 @@ class PostsState extends State<Posts> with RouteAware {
                     );
               }),
           FutureBuilder(
-            future: otherpost(),
+            future: Otherpost(),
             builder: (context, snapshot) {
               List? models = snapshot.data ?? [];
               return Expanded(
@@ -137,6 +140,24 @@ class PostsState extends State<Posts> with RouteAware {
     else {
       favoritepost = snapshot.data()?["favorite"];
     }
+    int i = 0;
+    await FirebaseFirestore.instance
+        .collection('posts')
+        .where('work', isEqualTo: post!["work"])
+        .orderBy("date", descending: true)
+        .get()
+        .then(
+          (QuerySnapshot querySnapshot) => {
+            querySnapshot.docs.forEach(
+              (doc) {
+                otherpost.add(doc.data());
+                sumscore += otherpost[i]["score"];
+                i++;
+              },
+            ),
+          },
+        );
+    double average = sumscore / i;
 
     return SingleChildScrollView(
       child: Column(
@@ -209,8 +230,8 @@ class PostsState extends State<Posts> with RouteAware {
               children: [
                 TextSpan(text: "平均：", style: TextStyle(color: Colors.white)),
                 TextSpan(
-                    text: post?["score"].toString(),
-                    style: TextStyle(color: getColorForScore(post?["score"]))),
+                    text: average.toString(),
+                    style: TextStyle(color: getColorForScore(average))),
                 TextSpan(text: "点", style: TextStyle(color: Colors.white)),
               ],
             ),
@@ -308,12 +329,11 @@ class PostsState extends State<Posts> with RouteAware {
     );
   }
 
-  Future<List> otherpost() async {
+  Future<List> Otherpost() async {
     DocumentSnapshot<Map<String, dynamic>> snapshot =
         await FirebaseFirestore.instance.collection("posts").doc(postid).get();
     Map<String, dynamic>? mpost = snapshot.data();
-    List postlist = [];
-    List otherpost = [];
+
     await FirebaseFirestore.instance
         .collection('posts')
         .where('work', isEqualTo: mpost!["work"])

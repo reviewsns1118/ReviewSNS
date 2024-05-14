@@ -52,7 +52,7 @@ class WorksState extends State<Works> with RouteAware {
     }
   }
 
-  Color getColorForScore(int score) {
+  Color getColorForScore(double score) {
     // スコアを整数に変換。不正な値があれば0とする
 
     if (score >= 90 && score <= 100) {
@@ -88,7 +88,7 @@ class WorksState extends State<Works> with RouteAware {
             },
           ),
           FutureBuilder(
-            future: otherpost(),
+            future: Otherpost(),
             builder: (context, snapshot) {
               List? models = snapshot.data ?? [];
               return Expanded(
@@ -111,6 +111,8 @@ class WorksState extends State<Works> with RouteAware {
   }
 
   Future<Widget> postwidget() async {
+    List otherpost = [];
+    num sumscore=0;
     DocumentSnapshot<Map<String, dynamic>> snapshot =
         await FirebaseFirestore.instance.collection("works").doc(workid).get();
     work = snapshot.data();
@@ -127,6 +129,24 @@ class WorksState extends State<Works> with RouteAware {
             ),
           },
         );
+    int i=0;
+    await FirebaseFirestore.instance
+        .collection('posts')
+        .where('work', isEqualTo: work!["docid"])
+        .orderBy("date", descending: true)
+        .get()
+        .then(
+          (QuerySnapshot querySnapshot) => {
+            querySnapshot.docs.forEach(
+              (doc) {
+                otherpost.add(doc.data());
+                sumscore += otherpost[i]["score"];
+                i++;
+              },
+            ),
+          },
+        );
+    double average = sumscore / i;
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -155,17 +175,17 @@ class WorksState extends State<Works> with RouteAware {
             },
             child: Text("画像引用元URL"),
           ),
-          /*RichText(
+          RichText(
             text: TextSpan(
               children: [
                 TextSpan(text: "平均：", style: TextStyle(color: Colors.white)),
                 TextSpan(
-                    text: post?["score"].toString(),
-                    style: TextStyle(color: getColorForScore(post?["score"]))),
+                    text: average.toString(),
+                    style: TextStyle(color: getColorForScore(average))),
                 TextSpan(text: "点", style: TextStyle(color: Colors.white)),
               ],
             ),
-          ),*/
+          ),
           Text(
             "タグ一覧",
             style: TextStyle(color: Colors.white),
@@ -222,7 +242,7 @@ class WorksState extends State<Works> with RouteAware {
     );
   }
 
-  Future<List> otherpost() async {
+  Future<List> Otherpost() async {
     List postlist = [];
     List otherpost = [];
     await FirebaseFirestore.instance
