@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
-import 'infoupdate.dart';
 
 class Tweet {
   final String nickname;
@@ -79,31 +78,28 @@ class _AccountPageState extends State<AccountPage> {
     }
   }
 
-  Future<List<Tweet>> fmodels(String category,String order) async {
+  Future<List<Tweet>> fmodels(String category, String order) async {
     String orderfie;
     bool orderbool;
-    if(order=='投稿日時の新しい順'){
-      orderfie="date";
-      orderbool=true;
-    }
-    else if(order=='投稿日時の古い順'){
-      orderfie="date";
-      orderbool=false;
-    }
-    else if(order=='評価の高い順'){
-      orderfie="score";
-      orderbool=true;
-    }
-    else {
-      orderfie="score";
-      orderbool=false;
+    if (order == '投稿日時の新しい順') {
+      orderfie = "date";
+      orderbool = true;
+    } else if (order == '投稿日時の古い順') {
+      orderfie = "date";
+      orderbool = false;
+    } else if (order == '評価の高い順') {
+      orderfie = "score";
+      orderbool = true;
+    } else {
+      orderfie = "score";
+      orderbool = false;
     }
     List postlist = [];
     List<String> favoritelist = await getlist();
     await FirebaseFirestore.instance
         .collection('posts')
         .where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-        .orderBy(orderfie,descending: orderbool)
+        .orderBy(orderfie, descending: orderbool)
         .get()
         .then(
           (QuerySnapshot querySnapshot) => {
@@ -262,14 +258,22 @@ class _AccountPageState extends State<AccountPage> {
     );
 
     // obiとnaiyouをColumnで縦に並べる
-    return Container(
-      padding: const EdgeInsets.all(5),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          obi,
-          naiyou,
-        ],
+    return InkWell(
+      onTap: () {
+        context.goNamed(
+          'posts',
+          pathParameters: {'postid': model.postid},
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.all(5),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            obi,
+            naiyou,
+          ],
+        ),
       ),
     );
   }
@@ -306,8 +310,6 @@ class _AccountPageState extends State<AccountPage> {
                   color: Colors.white,
                   iconSize: 80,
                   onPressed: () async {
-                    String nickname = await getUser('nickname');
-                    String introduction = await getUser('introduction');
                     context.goNamed(
                       "infoupdate",
                     );
@@ -505,7 +507,7 @@ class _AccountPageState extends State<AccountPage> {
         SizedBox(height: 20),
         Expanded(
           child: FutureBuilder(
-              future: fmodels(category,dropdownValue),
+              future: fmodels(category, dropdownValue),
               builder: (context, snapshot) {
                 List<Tweet>? models = snapshot.data;
                 if (models == null)

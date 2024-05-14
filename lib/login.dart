@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
-import 'package:wotastagram/UI.dart';
 
 class StartPage extends StatelessWidget {
   @override
@@ -90,14 +89,24 @@ class StartPage extends StatelessWidget {
   }
 }
 
-class RegisterPage extends StatelessWidget {
+class RegisterPage extends StatefulWidget {
+  @override
+  State<RegisterPage> createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage> {
   // メッセージ表示用
   String infoText = '';
+
   // 入力したメールアドレス・パスワード
   String nickname = '';
+
   String userid = '';
+
   String email = '';
+
   String password = '';
+
   final CollectionReference users = FirebaseFirestore.instance.collection('users');
 
   @override
@@ -213,6 +222,7 @@ class RegisterPage extends StatelessWidget {
       ),
     );
   }
+
   Future<List<String>> _createNameOption(String value) async {
     var nickname = value;
     var nicknameList = <String>[];
@@ -226,11 +236,18 @@ class RegisterPage extends StatelessWidget {
   }
 }
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   // メッセージ表示用
   String infoText = '';
+
   // 入力したメールアドレス・パスワード
   String email = '';
+
   String password = '';
 
   @override

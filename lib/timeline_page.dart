@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'posts.dart';
 
 class Tweet {
   final String nickname;
@@ -105,7 +104,7 @@ class _TimelinePage extends State<TimelinePage>
       Map<String, dynamic>? work = await getDoc("works", postlist[i]["work"]);
       models.add(Tweet(
         user?["nickname"],
-        'assets/images/icon${(i % 11) + 1}.png',
+        user?["photoURL"],
         work?["title"],
         work?["imageURL"],
         postlist[i]["score"],
@@ -135,6 +134,7 @@ class _TimelinePage extends State<TimelinePage>
           child: CircleAvatar(
             radius: 14, // アイコンのサイズを設定
             backgroundImage: NetworkImage(model.iconUrl), // ユーザーの画像を表示
+            backgroundColor: Color.fromARGB(255, Random().nextInt(256), Random().nextInt(256), Random().nextInt(256)),
           ),
         ),
         SizedBox(width: 8),

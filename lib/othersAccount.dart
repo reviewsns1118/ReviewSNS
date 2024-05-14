@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'infoupdate.dart';
+import 'package:go_router/go_router.dart';
 
 class Tweet {
   final String nickname;
@@ -264,7 +264,14 @@ class _OtherAccountPageState extends State<OtherAccountPage> {
     );
 
     // obiとnaiyouをColumnで縦に並べる
-    return Container(
+    return InkWell(
+      onTap: () {
+        context.goNamed(
+          'posts',
+          pathParameters: {'postid': model.postid},
+        );
+      },
+      child: Container(
       padding: const EdgeInsets.all(5),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -272,6 +279,7 @@ class _OtherAccountPageState extends State<OtherAccountPage> {
           obi,
           naiyou,
         ],
+      ),
       ),
     );
   }

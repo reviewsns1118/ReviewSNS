@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'main.dart';
-import 'login.dart';
 import 'timeline_page.dart';
 import 'search_page.dart';
 import 'post_page.dart';

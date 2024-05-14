@@ -10,10 +10,11 @@ import 'package:wotastagram/infoupdate.dart';
 import 'package:wotastagram/login.dart';
 import 'package:wotastagram/othersAccount.dart';
 import 'package:wotastagram/posts.dart';
+import 'package:wotastagram/works.dart';
 import 'package:wotastagram/writepost.dart';
 
 final RouteObserver<ModalRoute> routeObserver = RouteObserver<ModalRoute>();
-bool login=false;
+bool login = false;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,9 +23,9 @@ Future<void> main() async {
   );
   FirebaseAuth.instance.authStateChanges().listen((User? user) {
     if (user == null) {
-      login=false;
+      login = false;
     } else {
-      login=true;
+      login = true;
     }
   });
 
@@ -34,9 +35,6 @@ Future<void> main() async {
     ),
   );
 }
-
-
-
 
 class MyApp extends StatelessWidget {
   MyApp({super.key});
@@ -54,10 +52,9 @@ class MyApp extends StatelessWidget {
       );
 }
 
-
 final goRouter = GoRouter(
   debugLogDiagnostics: true,
-  initialLocation: login?"/home":"/start",
+  initialLocation: login ? "/home" : "/start",
   routes: [
     GoRoute(
       name: 'start',
@@ -92,8 +89,24 @@ final goRouter = GoRouter(
         GoRoute(
           name: 'posts',
           path: 'posts/:postid',
+          routes: [
+            GoRoute(
+          name: 'worksfromposts',
+          path: 'works/:workid',
+          builder: (context, state) {
+            return Works(state.pathParameters["workid"]);
+          },
+        ),
+          ],
           builder: (context, state) {
             return Posts(state.pathParameters["postid"]);
+          },
+        ),
+        GoRoute(
+          name: 'works',
+          path: 'works/:workid',
+          builder: (context, state) {
+            return Works(state.pathParameters["workid"]);
           },
         ),
         GoRoute(
@@ -136,6 +149,15 @@ final goRouter = GoRouter(
         GoRoute(
           name: 'accounts',
           path: 'accounts/:uid',
+          routes: [
+            GoRoute(
+              name: 'othersposts',
+              path: 'posts/:postid',
+              builder: (context, state) {
+                return Posts(state.pathParameters["postid"]);
+              },
+            ),
+          ],
           builder: (context, state) {
             return OtherAccountPage(state.pathParameters["uid"]!);
           },

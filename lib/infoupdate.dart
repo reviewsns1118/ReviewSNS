@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:wotastagram/UI.dart';
 import 'package:wotastagram/main.dart';
 
 class Infoupdate extends StatefulWidget {
@@ -28,15 +27,7 @@ class _InfoupdateState extends State<Infoupdate> with RouteAware {
 
   @override
   Future<void> didPush() async {
-    DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
-        .instance
-        .collection("users")
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get();
-    setState(() {
-      nickname = snapshot.data()?["nickname"];
-      introduction = snapshot.data()?["introduction"];
-    });
+    
   }
 
   @override
@@ -58,7 +49,32 @@ class _InfoupdateState extends State<Infoupdate> with RouteAware {
         // 右側のアイコン一覧
       ),
       backgroundColor: Colors.black,
-      body: Center(
+      body: FutureBuilder(
+            future: PageBody(),
+            builder: (context, snapshot) {
+              Widget? models = snapshot.data;
+              return models ??
+                  Text(
+                    "Now Loading...",
+                    style: TextStyle(color: Colors.white),
+                  );
+            },
+          ),
+      
+    );
+  }
+
+  Future<Widget> PageBody()async{
+    DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+        .instance
+        .collection("users")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get();
+    setState(() {
+      nickname = snapshot.data()?["nickname"];
+      introduction = snapshot.data()?["introduction"];
+    });
+    return Center(
           child: Column(children: <Widget>[
         const Icon(
           Icons.account_circle,
@@ -106,8 +122,7 @@ class _InfoupdateState extends State<Infoupdate> with RouteAware {
             );
           },
         ),
-      ])),
-    );
+      ],),);
   }
 
   Future<List<String>> _createNameOption(String value) async {
